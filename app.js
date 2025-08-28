@@ -11,7 +11,7 @@ const {listingSchema, reviewSchema} = require("./schema.js");
 const Review = require("./models/review.js")
 
 const listings = require("./routes/listing.js");
-app.use("/listings", listings);
+
 
 
 main().then(() => {
@@ -29,7 +29,7 @@ app.use(methodOverride("_method"));
 app.engine('ejs',ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
-
+app.use("/listings", listings);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });

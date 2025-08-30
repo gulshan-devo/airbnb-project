@@ -35,12 +35,24 @@ router.get("/",wrapAsync(async(req,res) => {
  }));
   
  // create route
- router.post("/",validateListing,wrapAsync(async (req, res, next) =>{
-     const newListing = new Listing(req.body.listing);
-     await newListing.save();
-     res.redirect("/listings")
- }));
+//  router.post("/",validateListing,wrapAsync(async (req, res, next) =>{
+//      const newListing = new Listing(req.body.listing);
+//      await newListing.save();
+//      res.redirect("/listings")
+//  }));
  
+ router.post("/", validateListing,wrapAsync(async (req, res, next) => {
+  try {
+    const newListing = new Listing(req.body.listing);  //  use nested object
+    await newListing.save();    
+    res.redirect("/listings");
+  } catch (err) {
+    console.error(err);
+    res.send("Error creating listing");
+  }
+}));
+
+
  // edit route
  router.get("/:id/edit", wrapAsync(async(req , res) =>{
      let {id} = req.params;

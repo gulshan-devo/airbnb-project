@@ -16,21 +16,23 @@ const validateReview = (req, res, next) => {
     }
 };
 
-// Post Review Route
-router.post("/", validateReview, wrapAsync(async (req, res) => {
-    const listing = await Listing.findById(req.params.id);
-    if (!listing) throw new ExpressError(404, 'Listing not found');
-    const newReview = new Review(req.body.review);
+// Review routes
+router.post("/",validateReview,wrapAsync( async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+    listing.reviews.push(newReview._id);
     await newReview.save();
-    listing.reviews.push(newReview._id); // Note: Mongoose will automatically get the ObjectId.
     await listing.save();
     res.redirect(`/listings/${listing._id}`);
 }));
 
-// Delete Review Route
+
+
+// delete review route
+
 router.delete("/:reviewId", wrapAsync(async (req, res) => {
-    let { id, reviewId } = req.params;
-    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    let {id, reviewId} = req.params;
+    await Listing.findByIdAndUpdate(id,{$pull: {reviews: reviewId}});
     await Review.findByIdAndDelete(reviewId);
     res.redirect(`/listings/${id}`);
 }));

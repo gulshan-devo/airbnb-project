@@ -6,7 +6,7 @@
             </h3>
         </div>
         <div class="card col-6 offset-3 show-card listing-card">
-            <img src="<%= listing.image %>" class="card-img-top show-img" alt="listing_image">
+            <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
             <div class="card-body">
                 <p class="card-text">
                     <%= listing.description %><br>
@@ -19,7 +19,7 @@
         </div>
         <br>
         <div class="btns">
-            <a href="/listings/<%= listing._id %>/edit" class="btns edit-btn col-1 offset-3"
+            <a href="/listings/<%= listing._id %>/edit" class="btns btn-dark edit-btn col-1 offset-3"
                 style="color: white;">Edit</a>
 
             <form method="post" action="/listings/<%=listing._id%>?_method=Delete">
@@ -63,7 +63,7 @@
                     </div>
                 <%}%>
             </div>
-            </div>
+        
         </div>
     </div>
     <br><br>

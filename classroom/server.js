@@ -3,7 +3,7 @@ const app = express();
 const users = require('./routes/user.js');
 const posts = require('./routes/post.js');
 const cookieParser = require('cookie-parser');
-app.use(cookieParser());
+app.use(cookieParser("thisismysecret"));
 // cookies creation
 app.get("/getcookies", (req, res) =>{
     res.cookie('great', 'yes it is');
@@ -16,6 +16,10 @@ app.get('/greet', (req, res) => {
     let {name ='anonymous'} = req.cookies;
     res.send(`Hey there, ${name}`);
 });
+
+
+// signed cookies
+ 
 
 
 app.get("/", (req, res) =>{

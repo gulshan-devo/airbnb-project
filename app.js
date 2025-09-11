@@ -5,6 +5,9 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require('ejs-mate');
 const ExpressError = require("./utils/ExpressError.js");
+const session = require("express-session");
+const flash = require("connect-flash");
+
 
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/reviews.js");
@@ -25,12 +28,35 @@ app.engine('ejs',ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews);
+const sessionOption = {
+    secret: "thisshouldbeabettersecret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    },
+};
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
+
+app.use(session(sessionOption));
+app.use(flash());
+
+app.use((req, res, next) => {
+     res.locals.success = req.flash("success");
+     res.locals.error = req.flash("error");
+    if (res.locals.success.length > 0) {
+        console.log(res.locals.success);
+    }
+    next();
+});
+
+app.use("/listings", listings);
+app.use("/listings/:id/reviews", reviews);
+
 
 app.all("/*splate",(req, res, next) => {
     next(new ExpressError(404,"page not found!"));
